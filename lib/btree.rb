@@ -36,9 +36,10 @@ class BinaryTree
   end
 end
 
-# Takes an array and returns an unsorted tree of nodes
+# Takes an array and returns an tree of nodes where the left
+# children are smaller and right children are greater
 # Use BinaryTree class's .to_s to view
-def build_tree(array)
+def build_sorted_tree(array)
   tree = BinaryTree.new(nil, nil, nil)
   array.each do |item|
     tree.insert(item)
@@ -46,20 +47,29 @@ def build_tree(array)
   tree
 end
 
-# Takes a tree and outputs a sorted array
+# Takes a tree and flattens it into an
 # See go_looking below for methodology
-def sort_tree(tree)
+def flatten_tree(tree)
   array = []
   go_looking(tree, array)
   array
 end
 
 # Uses a depth-first-search like recursion alorithim assigning the
-# left-most and thus smaller node to the array first. When farther
+# left-most (and if sorted smaller) node to the array first. When farther
 # left smaller nodes are no longer present, it adds its own value
-# to the array before searching and adding for righter (larger) nodes.
+# to the array before searching and adding for righter (if sorted, larger)
+# nodes.
 def go_looking(tree, array)
   go_looking(tree.left, array) unless tree.left.nil?
   array << tree.payload
   go_looking(tree.right, array) unless tree.right.nil?
+end
+
+# Sorts an array by building it into a sorted tree and then
+# flattening it into an array using build_sorted_tree and
+# flatten_tree in sequence
+def sort(array)
+  tree = build_sorted_tree(array)
+  flatten_tree(tree)
 end
